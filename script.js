@@ -1,7 +1,7 @@
 // //global variables, can be accessed by all functions
 
 //   //declare a variable named playerName that stores the value the player enters from a prompt
-//   let playerName = prompt("Welcome to the Monster Smash game, please enter your name")
+  // let playerName = prompt("Welcome to the Monster Smash game, please enter your name")
 
 //   //declare a variable named playerHealth and set it equal to the number value 15
 //   let playerHealth = 15
@@ -117,41 +117,26 @@
 
 class Fighter
 {
-  constructor(name, healthPoints, attackPoints)
+  constructor(name, healthPoints, attackPoints = randomNum(1, 6))
   {
     this.name = name
-    this.healthPoints = healthPoints
-    this.attackPoints = this.randomNum(1, 6)
+    this.healthPoints = 15
+    this.attackPoints = attackPoints
   }
 
-  randomNum(min, max) 
-  {
-    //return a random integer between min - max
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min) + min) // The maximum is exclusive and the minimum is inclusive
-  }
-
-  attack(hero, monster)
+  attack(target)
   {
   //use randomNum to generate attack points value between 1 - 5 and save the value to a variable named playerAttackPoints
     // let attackPoints = randomNum(1, 6)
 
   //subtract playerAttackPoints from monsterHealth and update the monsterHealth variable
+    target.healthPoints -= this.attackPoints
     
-    if(hero === myHero)
-    {
-      myHero.attackPoints = randomNum(1, 6)
-      myMonster.healthPoints = myMonster.healthPoints - myHero.attackPoints
-      
-    }
-    else
-    {
-      myHero.healthPoints = myHero.healthPoints - myMonster.attackPoints
-    }
+
+    console.log(target)
     
     //use an alert with string template literals to tell the player: 
-    alert(`You attacked ${this.name} with ${attackPoints} attack points of damage, ${this.name} has ${this.healthPoints} health points left`)
+    alert(`You attacked ${target.name} with ${this.attackPoints} attack points of damage, ${target.name} has ${target.healthPoints} health points left`)
   
   }
 
@@ -159,10 +144,10 @@ class Fighter
 
 class Hero extends Fighter
 {
-  constructor(name, healthPoints, weapon)
+  constructor(name, healthPoints, attackPoints)
   {
     super(name, healthPoints, attackPoints)
-    this.weapon = weapon
+    this.weapon = "Axe"
   }
 
   weapon()
@@ -171,14 +156,12 @@ class Hero extends Fighter
   }
 
 }
-
-
 class Monster extends Fighter
 {
-  constructor(name, healthPoints, ability)
+  constructor(name, healthPoints, attackPoints)
   {
     super(name, healthPoints, attackPoints)
-    this.ability = ability
+    this.ability = "shape-shift"
   }
 
   ability()
@@ -187,15 +170,26 @@ class Monster extends Fighter
   }
 }
 
-console.log(myMonster = new Monster("Boogyman", 15, "lighting"))
+function randomNum(min, max) 
+{
+  //return a random integer between min - max
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min) + min) // The maximum is exclusive and the minimum is inclusive
+}
 
-console.log(myHero = new Hero("Superman", 15, "laser-beams"))
+let myMonster = new Monster("Boogyman")
+console.log(myMonster)
+
+let myHero = new Hero("Superman")
+
+console.log(myHero)
 
 // console.log(hero)
 
-myFighter = new Fighter
+// myFighter = new Fighter
 
-console.log(myFighter.attack(myHero))
+// console.log(myFighter.attack(myHero))
 
 function playRound() {
   //use randomNum to return either 0 or 1
@@ -212,19 +206,19 @@ function playRound() {
   {
     myHero.attack(myMonster)
 
-    if(monsterHealth > 0)
+    if(myMonster.healthPoints > 0)
     {
-      monsterAttack()
+      myMonster.attack(myHero)
     }
   }
 
   if(playerTurn === 1)
   {
-    monsterAttack()
+    myMonster.attack(myHero)
 
-    if(playerHealth > 0)
+    if(myHero.healthPoints > 0)
     {
-      playerAttack()
+      myHero.attack(myMonster)
     }
   }
 }
@@ -232,29 +226,29 @@ function playRound() {
 function playGame() {
   //beginning game message
   alert(
-    `Hello, ${playerName}! You are fighting ${monsterName}! Your health is at ${playerHealth}, ${monsterName}'s health is at ${monsterHealth}`
+    `Hello, ${myHero.name}! You are fighting ${myMonster.name}! Your health is at ${myHero.healthPoints}, ${myMonster.name}'s health is at ${myMonster.healthPoints}`
   );
 
  let roundNumber = 0
 
   //while loop that runs until player or monster's health is <= 0 
   //add the condition in the while loop parentheses 
-  while(playerHealth > 0 && monsterHealth > 0){
+  while(myHero.healthPoints > 0 && myMonster.healthPoints > 0){
     roundNumber++
    //write an alert statement that tells the player what round number it is, and the player's and monster's current health points
-    alert(`This is round ${roundNumber} the current health points for ${playerName} is ${playerHealth} and current health points for ${monsterName} is ${monsterHealth}`)
+    alert(`This is round ${roundNumber} the current health points for ${myHero.name} is ${myHero.healthPoints} and current health points for ${myMonster.name} is ${myMonster.healthPoints}`)
    //call playRound inside the while loop
     playRound()
   }
   //outside of while loop, declare a winner and use alert to show a win or lose message 
-  if(playerHealth > 0 && monsterHealth < 0)
+  if(myHero.healthPoints > 0 && myMonster.healthPoints < 0)
   {
-    alert(`${playerName} you win ${monsterName} you lose`);
+    alert(`${myHero.name} you win ${myMonster.name} you lose`);
   }
   
-  if(monsterHealth > 0 && playerHealth < 0)
+  if(myMonster.healthPoints > 0 && myHero.healthPoints < 0)
   {
-    alert(`${monsterName} you win ${playerName} you lose`);
+    alert(`${myMonster.name} you win ${myHero.name} you lose`);
   }
 
 }
